@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class=" mt-4 pt-6 text-gray-600 border-t border-gray-800 text-center"> © 2019 WeTeach. All rights reserved.</div>
+    <div class=" mt-4 pt-6 text-gray-600 border-t border-gray-800 text-center"> © 2024 WeTeach. All rights reserved.</div>
 </footer>
 </template>
 

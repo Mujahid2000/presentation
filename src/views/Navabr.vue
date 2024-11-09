@@ -7,7 +7,7 @@ import { RouterLink } from "vue-router";
     <div class="flex items-center justify-between">
       <RouterLink to="/" class="flex items-center pl-8">
         <i class="text-2xl fas fa-campground"></i>
-        <h1 class="pl-4 font-serif text-xl font-bold tracking-wide">Brand</h1>
+        <h1 class="pl-4 font-serif text-xl font-bold tracking-wide">WeTeach</h1>
       </RouterLink>
 
       <div class="md:hidden"></div>
