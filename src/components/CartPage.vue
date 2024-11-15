@@ -127,7 +127,7 @@ const removeItem = async (id) => {
                   <td class="px-6 py-4 text-gray-800">{{ lesson.subject }}</td>
                   <td class="px-6 py-4">
                     <button
-                      @click="removeItem(lesson.lesson_id)"
+                      @click="removeItem(lesson._id)"
                       class="text-red-500 hover:text-red-700"
                       aria-label="Remove from cart"
                     >

@@ -280,7 +280,7 @@ const sortDataDescending = () => {
               Price: <span class="font-semibold">${{ course.price }}</span>
             </p>
             <p class="mb-4 text-sm text-gray-600">
-              Spaces Left: <span class="font-semibold">{{ course.space }}</span>
+              Spaces Left: <span class="font-semibold">{{course.space > 0 ? course.space : 0}}</span>
             </p>
           </div>
           <div class="px-4 pb-2">
