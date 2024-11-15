@@ -65,7 +65,7 @@ onMounted(fetchCart);
 
 const totalPrice = computed(() => {
   return cartData.value
-    ? cartData.value.reduce((sum, item) => sum + parseFloat(item.price) * 1, 0)
+    ? cartData.value.reduce((sum, item) => sum + parseFloat(item.price) * parseFloat(item.space), 0)
     : 0;
 });
 
