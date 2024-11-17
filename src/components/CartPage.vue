@@ -109,6 +109,11 @@ const removeItem = async (id) => {
                   >
                     Actions
                   </th>
+                  <th
+                    class="px-6 py-4 font-semibold text-left text-gray-600 uppercase bg-gray-200"
+                  >
+                    Seats
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -146,6 +151,9 @@ const removeItem = async (id) => {
                         />
                       </svg>
                     </button>
+                  </td>
+                  <td>
+                    {{ lesson.space }}
                   </td>
                 </tr>
               </tbody>

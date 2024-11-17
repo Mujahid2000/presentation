@@ -44,15 +44,15 @@ const fetchCart = async () => {
 
 // Add a new item to the cart and update availability
 const handleAddToCart = async (lesson) => {
-  const lesson_id = lesson._id; // লেসন আইডি আলাদা করে রাখুন
+  const lesson_id = lesson._id; 
 
   try {
-    // POST রিকোয়েস্ট পাঠান
+    
     const response = await fetch("http://localhost:5000/cart", {
       method: "POST",
       body: JSON.stringify({
         ...lesson,
-        lesson_id: lesson_id, // লেসন আইডি স্পষ্টভাবে পাঠান
+        lesson_id: lesson_id, 
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -63,23 +63,23 @@ const handleAddToCart = async (lesson) => {
       throw new Error("Network response was not ok");
     }
 
-    // কার্ট আপডেট
+    
     await fetchCart();
 
-    // মূল `data` এবং `filteredData` উভয় আপডেট করুন
+    
     const updateSpace = (items) =>
       items.map((item) => {
         if (item._id === lesson_id) {
           return {
             ...item,
-            space: item.space > 0 ? item.space - 1 : 0, // নিশ্চিত করুন স্পেস ০ এর নিচে না যায়
+            space: item.space > 0 ? item.space - 1 : 0, 
           };
         }
         return item;
       });
 
-    data.value = updateSpace(data.value); // মূল ডেটা আপডেট
-    filteredData.value = updateSpace(filteredData.value); // ফিল্টার করা ডেটা আপডেট
+    data.value = updateSpace(data.value); 
+    filteredData.value = updateSpace(filteredData.value); 
 
   } catch (error) {
     console.error("Error adding item to cart:", error);
