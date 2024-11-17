@@ -8,7 +8,7 @@ const loading = ref(true);
 const filterBy = ref(null);
 const orderBy = ref(null);
 const cartItemCount = ref(0);
-const searchTerm = ref("");  // New search term ref
+const searchTerm = ref(""); // New search term ref
 
 // Fetch lessons data from the backend
 const fetchLessons = async () => {
@@ -44,15 +44,14 @@ const fetchCart = async () => {
 
 // Add a new item to the cart and update availability
 const handleAddToCart = async (lesson) => {
-  const lesson_id = lesson._id; 
+  const lesson_id = lesson._id;
 
   try {
-    
     const response = await fetch("http://localhost:5000/cart", {
       method: "POST",
       body: JSON.stringify({
         ...lesson,
-        lesson_id: lesson_id, 
+        lesson_id: lesson_id,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -63,34 +62,30 @@ const handleAddToCart = async (lesson) => {
       throw new Error("Network response was not ok");
     }
 
-    
     await fetchCart();
 
-    
     const updateSpace = (items) =>
       items.map((item) => {
         if (item._id === lesson_id) {
           return {
             ...item,
-            space: item.space > 0 ? item.space - 1 : 0, 
+            space: item.space > 0 ? item.space - 1 : 0,
           };
         }
         return item;
       });
 
-    data.value = updateSpace(data.value); 
-    filteredData.value = updateSpace(filteredData.value); 
-
+    data.value = updateSpace(data.value);
+    filteredData.value = updateSpace(filteredData.value);
   } catch (error) {
     console.error("Error adding item to cart:", error);
   }
 };
 
-
-
 // Filter data based on attributes
 const handleFilterChange = (filterKey, isChecked) => {
   filterBy.value = filterKey;
+  orderBy.value = "ascending";
   let originalData = [...data.value];
   if (isChecked) {
     switch (filterKey) {
@@ -108,7 +103,9 @@ const handleFilterChange = (filterKey, isChecked) => {
         filteredData.value = originalData.sort((a, b) => a.price - b.price);
         break;
       case "availability":
-        filteredData.value = originalData.filter((course) => course.space > 0);
+        filteredData.value = originalData
+          .filter((course) => course.space > 0)
+          .sort((a, b) => a.space - b.space);
         break;
     }
   } else {
@@ -121,7 +118,8 @@ const sortDataAscending = () => {
   orderBy.value = "ascending";
   filteredData.value.sort((a, b) => {
     if (filterBy.value == "subject") return a.subject.localeCompare(b.subject);
-    if (filterBy.value == "location") return a.location.localeCompare(b.location);
+    if (filterBy.value == "location")
+      return a.location.localeCompare(b.location);
     if (filterBy.value == "price") return a.price - b.price;
     return a.space - b.space;
   });
@@ -132,7 +130,8 @@ const sortDataDescending = () => {
   orderBy.value = "descending";
   filteredData.value.sort((a, b) => {
     if (filterBy.value == "subject") return b.subject.localeCompare(a.subject);
-    if (filterBy.value == "location") return b.location.localeCompare(a.location);
+    if (filterBy.value == "location")
+      return b.location.localeCompare(a.location);
     if (filterBy.value == "price") return b.price - a.price;
     return b.space - a.space;
   });
@@ -145,11 +144,13 @@ watch(searchTerm, (newSearchTerm) => {
       course.subject.toLowerCase().includes(newSearchTerm.toLowerCase()) ||
       course.location.toLowerCase().includes(newSearchTerm.toLowerCase()) ||
       course.price.toString().includes(newSearchTerm) ||
-      (course.space > 0 ? "available" : "unavailable").includes(newSearchTerm.toLowerCase())
+      (course.space > 0 ? "available" : "unavailable").includes(
+        newSearchTerm.toLowerCase()
+      )
     );
   });
 });
-
+console.log(orderBy.value);
 // Initial data fetch
 onMounted(() => {
   fetchLessons();
@@ -158,16 +159,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class=" max-w-7xl mx-auto">
+  <div class="mx-auto max-w-7xl">
     <div class="relative my-5">
       <!-- Search Input -->
-      <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      <div
+        class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+      >
+        <svg
+          class="w-5 h-5 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
+        </svg>
       </div>
       <input
         type="search"
         v-model="searchTerm"
-        class="block focus:border-none p-4 pl-10 w-full text-sm text-gray-900 rounded-lg border focus:border-blue-500 border-gray-600 placeholder-gray-400 focus:ring-blue-500"
+        class="block w-full p-4 pl-10 text-sm text-gray-900 placeholder-gray-400 border border-gray-600 rounded-lg focus:border-none focus:border-blue-500 focus:ring-blue-500"
         placeholder="Search lessons..."
         required
       />
@@ -175,7 +191,6 @@ onMounted(() => {
     <main
       class="container flex flex-col gap-6 py-8 mx-auto space-y-8 md:flex-row max-w-7xl md:space-y-0"
     >
-    
       <div class="w-full p-4 space-y-4 bg-white rounded-lg shadow-md md:w-1/4">
         <h2 class="text-2xl font-semibold text-gray-800">Filters</h2>
         <h3 class="mb-4 text-xl font-medium text-gray-600">
@@ -220,6 +235,7 @@ onMounted(() => {
                 class="mr-2 check"
                 id="ascending"
                 name="order"
+                :checked="orderBy === 'ascending'"
               />
               <label for="ascending" class="text-lg text-gray-700"
                 >Ascending</label
@@ -233,6 +249,7 @@ onMounted(() => {
                 class="mr-2 check"
                 id="descending"
                 name="order"
+                :checked="orderBy === 'descending'"
               />
               <label for="descending" class="text-lg text-gray-700"
                 >Descending</label
@@ -272,9 +289,11 @@ onMounted(() => {
               Price: <span class="font-semibold">${{ course.price }}</span>
             </p>
             <p class="mb-4 text-sm text-gray-600">
-  Spaces Left: <span class="font-semibold">{{ course.space > 0 ? course.space : 0 }}</span>
-</p>
-
+              Spaces Left:
+              <span class="font-semibold">{{
+                course.space > 0 ? course.space : 0
+              }}</span>
+            </p>
           </div>
           <div class="px-4 pb-2">
             <button

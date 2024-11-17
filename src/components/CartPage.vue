@@ -105,14 +105,14 @@ const removeItem = async (id) => {
                     Title
                   </th>
                   <th
-                    class="px-6 py-4 font-semibold text-left text-gray-600 uppercase bg-gray-200"
+                    class="px-6 py-4 font-semibold text-center text-gray-600 uppercase bg-gray-200"
                   >
-                    Actions
+                    Seats
                   </th>
                   <th
                     class="px-6 py-4 font-semibold text-left text-gray-600 uppercase bg-gray-200"
                   >
-                    Seats
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -130,6 +130,10 @@ const removeItem = async (id) => {
                     />
                   </td>
                   <td class="px-6 py-4 text-gray-800">{{ lesson.subject }}</td>
+                  <td class="text-center">
+                    {{ lesson.space }} 
+                    
+                  </td>
                   <td class="px-6 py-4">
                     <button
                       @click="removeItem(lesson.lesson_id)"
@@ -152,9 +156,7 @@ const removeItem = async (id) => {
                       </svg>
                     </button>
                   </td>
-                  <td>
-                    {{ lesson.space }}
-                  </td>
+                  
                 </tr>
               </tbody>
             </table>
